@@ -90,12 +90,12 @@ jobs:
       - name: Import credentials
         run: packages/cli/bin/n8n import:credentials --input=test-workflows/credentials.json
         env:
-          N8N_ENCRYPTION_KEY: ${{secrets.ENCRYPTION_KEY}}
+          N8N_ENCRYPTION_KEY: ${{secrets.N8N_ENCRYPTION_KEY}}
 
       - name: Import workflows
         run: packages/cli/bin/n8n import:workflow --separate --input=test-workflows/workflows
         env:
-          N8N_ENCRYPTION_KEY: ${{secrets.ENCRYPTION_KEY}}
+          N8N_ENCRYPTION_KEY: ${{secrets.N8N_ENCRYPTION_KEY}}
 
       - name: Copy static assets
         run: |
@@ -107,7 +107,8 @@ jobs:
         run: packages/cli/bin/n8n executeBatch --shallow --skipList=test-workflows/skipList.txt --githubWorkflow --shortOutput --concurrency=16 --compare=test-workflows/snapshots
         id: tests
         env:
-          N8N_ENCRYPTION_KEY: ${{secrets.ENCRYPTION_KEY}}
+          N8N_ENCRYPTION_KEY: ${{secrets.N8N_ENCRYPTION_KEY}}
+          N8N_RUNNERS_ENABLED: true
           SKIP_STATISTICS_EVENTS: true
           DB_SQLITE_POOL_SIZE: 4
           N8N_SENTRY_DSN: ${{secrets.CI_SENTRY_DSN}}
