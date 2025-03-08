@@ -1,0 +1,27 @@
+name: Workflow Control
+
+on:
+  push:
+    branches:
+      - '**'  # Run on all branches
+  pull_request:
+    branches:
+      - '**'  # Run on all PRs
+
+jobs:
+  cancel-other-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ github.token }}
+          workflow_id: |
+            azure-login.yml
+            docker-image.yml
+            check-docs-urls.yml
+            benchmark-nightly.yml
+            run-test-workflows.yml
+            destroy-benchmark-env.yml
+            e2e-tests.yml
+          # Add other workflow filenames you want to cancel
